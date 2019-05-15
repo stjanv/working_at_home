@@ -15,6 +15,6 @@ def Factor(n):
            print(u,item)
            break
    return answer
-
+print("shame")
 a=int(input())
 print(Factor(a))
