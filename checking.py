@@ -43,11 +43,11 @@ was = {}
 
 def Found(x0, y0):
     labirint2[x0][y0] = '2'
-    if labirint2[x0][y0 - 1] == '0':
-        Found(x0, y0 - 1)
-
-    elif labirint2[x0][y0 + 1] == '0':
+    if labirint2[x0][y0 + 1] == '0':
         Found(x0, y0 + 1)
+
+    elif labirint2[x0][y0 - 1] == '0':
+        Found(x0, y0 + - 1)
 
     elif labirint2[x0 - 1][y0] == '0':
         Found(x0 - 1, y0)
