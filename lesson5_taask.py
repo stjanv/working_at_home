@@ -1,36 +1,40 @@
-from zipfile import ZipFile
-from os import mkdir
-import string
-import itertools
+import time
+from functools import lru_cache
 
-line = '-----------------------------'
+@lru_cache(maxsize=4232)
+def fib(n):
+    if n==0 or n==1:
+        return 1
+    else:
+        return fib(n-1)+fib(n-2)
 
-def generator(chars):
-    #attempts = 0
-    for password_length in range(1, 9):
-        for password in itertools.product(chars, repeat=password_length):
-            #attempts += 1
-            password = ''.join(password)
-            archive.setpassword(password.encode())
-            try:
-                archive.extractall(directory)
-            except:
-                yield "[False]:" + password
-            else:
-                yield line + "\n[True]: " + password
-                return
+t1=time.time()
+print([fib(x) for x in range(1000)])
+t2=time.time()
+print(t2-t1)
 
 
-directory = "ExtractArchive"
-try:
-    mkdir(directory)
-except FileExistsError:
-    pass
 
-print(line)
-chars = string.ascii_lowercase + string.digits
-with ZipFile(input("Archive: ")) as archive:
-    print(line)
-    for password in generator(chars):
-        print(password)
-print(line)
+
+
+
+
+
+
+# cache={}
+# def doIt(num):
+#     t=time.time()
+#     if num in cache:
+#         print('cached...')
+#         return cache[num]
+#     print('doing...')
+#     time.sleep(2)
+#     res=num*num
+#     cache[num]=(res,time.time()-t)
+#
+#     return (res,time.time()-t)
+#
+# print(doIt(4))
+# print(doIt(4))
+# print(doIt(4))
+# print(doIt(4))
