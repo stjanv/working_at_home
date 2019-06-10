@@ -7,7 +7,8 @@ class Node:
         self.val = val
         self.next = None
         self.prev = None
-
+    def __str__(self):
+        return '{},{}'.format(self.key,self.val)
 
 class Val:
     def __init__(self, value, count_usage):
@@ -39,7 +40,7 @@ class My_Lru_Cache:
             time.sleep(1)
             return print('Cached...{} {}'.format(args, self.cache[args]))
         if len(self.cache) == self.cache_size:
-            node = self.sort()
+            node = self.take_lower_count_usage()
             self.remove(node)
             del self.cache[node.key]
         res = self.func(*args, **kwargs)
@@ -47,23 +48,19 @@ class My_Lru_Cache:
         self.cache[args] = value
         node = Node(args, value)
         self.add(node)
-        #ok=self.sort()
         return print(value)
 
-    def sort(self):
-        current1 = self.head
+    def take_lower_count_usage(self):
+        current1 = self.head.next
         current2 = current1.next
-        while current2.next is not None:
-            if current1.val.count_usage > current2.val.count_usage :
-                current1=current2
-                current2=current2.next
-                node=current1
-            else:
+        while current2 != self.tail:
+            if current1.val.count_usage> current2.val.count_usage:
                 current1 = current2
                 current2 = current2.next
-                node=current2
+            else:
+                current2 = current2.next
 
-        return node
+        return current1
 
 
 
@@ -109,10 +106,11 @@ func(2)
 func(2)
 func(3)
 func(3)
-func(6)
-func(6)
-func(6)
+func(3)
 func(6)
 func(6)
 func(5)
 func(2)
+func(5)
+func(6)
+func(3)
