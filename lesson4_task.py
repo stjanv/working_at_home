@@ -1,7 +1,12 @@
+from operator import itemgetter
+import collections
 
-""" list1 = [5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5]
+list1 = [5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5]
 
-#task1
+
+# task1
+
+
 def swap(list1):
     list1_index_x = 2
     list1_index_y = 3
@@ -11,47 +16,44 @@ def swap(list1):
 
 print(swap(list1))
 
-#task2
-def mutka(list3):
-    list3 = []
-    for i in range(len(list1)):
-        list3.append(bin(i))
+
+# task2
+
+
+def take_bin(list1):
+    list3 = [bin(i) for i in range(len(list1))]
     return list3
 
 
-def mutka2(list2):
+def take_whole_nums(list2):
     list3 = []
     for i in list2:
-        calk = 0
-        for j in i:
-            if j == '1':
-                calk += 1
+        calk = i.count('1')
         if calk >= 2 and calk % 2 == 0:
             list3.append(i)
-
     return list3
 
 
-def mutka3(list1, list2):
-    calk = 0
-    calk2 = 0
-    for i in range(len(list1)):
-        if bin(i) == list2[calk]:
-            calk2 += list1[i]
-            calk += 1
-    return calk2
+def return_res(list3, list1, list2):
+    summ = 0
+    for i in list3:
+        for j in list2:
+            if i == j:
+                summ += list1[list2.index(j)]
+    return summ * list1[len(list1) - 1]
 
 
-list2 = mutka(list1)
+list2 = take_bin(list1)
 print(list2)
-print(mutka2(list2))
-print(mutka3(list1, list2) * (list1[len(list2) - 2]))
+list3 = take_whole_nums(list2)
+print(list3)
+print(return_res(list3, list1, list2))
 
 
-#task 3
-a = input()
+# task 3
 
 
+# a = input()
 def check_for_registry(a):
     g = True
     for i in a:
@@ -81,16 +83,16 @@ def check(a: str):
         print('Pass is incorrect')
 
 
-print(check_for_registry(a))
-print(check_for_cheet(a))
-check(a)"""
+# print(check_for_registry(a))
+# print(check_for_cheet(a))
+# check(a)
 
 # task4
 autos = [
 
     {"brand": "Ford", "model": "Mustang", "year": 1964, "price": 4000},
 
-    {"brand": "Ford", "model": "Mondeo", "year": 1999, "price": 3000},
+    {"brand": "Ford", "model": "Mondeo", "year": 1999, "price": None},
 
     {"brand": "Ford", "model": "Fiesta", "year": 2003, "price": 4200},
 
@@ -98,7 +100,7 @@ autos = [
 
     {"brand": "BMW", "model": "X3", "year": 2001, "price": 5000},
 
-    {"brand": "Nissan", "model": None, "year": 1964, "price": 1111},
+    {"brand": "Nissan", "model": None, "year": 1964, "price": None},
 
     {"brand": "VW", "model": "Passat", "year": 1996, "price": 1200},
 
@@ -107,8 +109,23 @@ autos = [
     {"brand": "Renault", "model": "Megane", "year": 1999, "price": 2300}
 
 ]
-b = {"sad": "kol", "mad": "two"}
-print(sorted(autos, key=lambda x: x['price'])[::-1])
 
 
+def by_key(autos):
+    for i in range(len(autos)):
+        for j in range(len(autos)-1):
+            if autos[j]['price'] is None:
+                continue
+            if autos[i]['price'] is None:
+                autos[i], autos[j] = autos[j], autos[i]
 
+            elif autos[i]['price'] < autos[j]['price']:
+                autos[i], autos[j] = autos[j], autos[i]
+    return autos
+
+
+autos = sorted(autos, key=lambda x: x['price'] if x['price'] else 0, reverse=True)
+print(autos)
+
+autos = by_key(autos)[::-1]
+print(autos)
