@@ -31,7 +31,7 @@ line = '-----------------------------'
 #     pass
 #
 # print(line)
-# chars = string.ascii_lowercase + string.digits
+# chars = string.ascii_lowercase
 # with ZipFile(input("Archive: ")) as archive:
 #     print(line)
 #     for password in generator(chars):
@@ -42,8 +42,8 @@ line = '-----------------------------'
 MyPath = '.\ExtractArchive\lesson6'
 
 lines = '=================================================================================================='
-
-
+takes_Words_in_lines = []
+takes_Words_in_lines2 = []
 def printing(takes_Words_in_lines):
     for lines in takes_Words_in_lines:
         print(lines)
@@ -57,13 +57,12 @@ def chech_dirs_tree(MyPath):
     return dirsPathesList
 
 
-def read_file(dirsPathesList):
-    f = open(dirsPathesList[0][0] + '\\' + dirsPathesList[0][1][0], 'r', encoding='utf-8')
+def read_file(i, j):
+    f = open(i[0] + '\\' + j, 'r', encoding='utf-8')
     return f
 
 
 def add_file_to_list(this_file):
-    takes_Words_in_lines = []
     takes_lines = this_file.readlines()
     for word in takes_lines:
         takes_Words_in_lines.append(word.split('\t'))
@@ -72,21 +71,18 @@ def add_file_to_list(this_file):
 
 
 def create_files(llist: list):
-    set_of_id = []
+    set_of_id = set()
+    set_of_sityes = set()
+    temp_list = []
     for i in llist:
-        if i[4] not in set_of_id:
-            set_of_id.append(i[4])
-        else:
-            continue
-
-    set_of_sityes = []
-    for ii in llist:
-        if ii[3] not in set_of_id:
-            set_of_sityes.append(ii[3])
-        else:
-            continue
-    for sity in  set_of_sityes:
+        set_of_sityes.add(i[3])
+        temp_list.append(i[4])
+    for j in temp_list:
+        if  temp_list.count(j)==1:
+            set_of_id.add(j)
+    for sity in set_of_sityes:
         searches_dict = {}
+        searches_dict.clear()
         for item in llist:
             if item[3] == sity:
                 if item[5] not in searches_dict:
@@ -95,25 +91,31 @@ def create_files(llist: list):
                 else:
                     if item[4] in set_of_id:
                         searches_dict[item[5]] += 1
-        for f in os.listdir(path='.\ExtractArchive\searches'):
-            if f!=(sity+'.tsv'):
-                new_file=open('.\ExtractArchive\searches'+'\\'+sity+'.tsv','w',encoding='utf-8')
-                for key in searches_dict.keys():
-                    new_file.write(key+'\t'+str(searches_dict[key])+'\n')
-                new_file.close()
-            else:
-                new_file=open('.\ExtractArchive\searches'+'\\'+sity+'.tsv','a',encoding='utf-8')
-                for key in searches_dict.keys():
-                    new_file.write(key+'\t'+str(searches_dict[key])+'\n')
-                new_file.close()
+
+        if  os.listdir(path='.\ExtractArchive\searches') == []:
+            new_file = open('.\ExtractArchive\searches' + '\\' + sity + '.tsv', 'w', encoding='utf-8')
+            for key in searches_dict.keys():
+                new_file.write(key + '\t' + str(searches_dict[key]) + '\n')
+            new_file.close()
+        else:
+            new_file = open('.\ExtractArchive\searches' + '\\' + sity + '.tsv', 'w', encoding='utf-8')
+            for key in searches_dict.keys():
+                new_file.write(key + '\t' + str(searches_dict[key]) + '\n')
+            new_file.close()
+
+
 
 
 if __name__ == '__main__':
+    #os.chdir('C:/Users/2K_Mefis_Try/PycharmProjects/home_work')
     dirsPathesList = chech_dirs_tree(MyPath)
     pprint(dirsPathesList)
     print(lines)
-    f = read_file(dirsPathesList)
-    takes_Words_in_lines = add_file_to_list(f)
-    f.close()
-    #printing(takes_Words_in_lines)
-    create_files(takes_Words_in_lines)
+    for i in dirsPathesList:
+        for j in i[1]:
+            f = read_file(i,j)
+            takes_Words_in_lines2 = add_file_to_list(f)
+            f.close()
+    printing(takes_Words_in_lines2)
+    print(len(takes_Words_in_lines2))
+    print(create_files(takes_Words_in_lines2))
