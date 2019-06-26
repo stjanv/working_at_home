@@ -44,6 +44,8 @@ MyPath = '.\ExtractArchive\lesson6'
 lines = '=================================================================================================='
 takes_Words_in_lines = []
 takes_Words_in_lines2 = []
+
+
 def printing(takes_Words_in_lines):
     for lines in takes_Words_in_lines:
         print(lines)
@@ -73,26 +75,27 @@ def add_file_to_list(this_file):
 def create_files(llist: list):
     set_of_id = set()
     set_of_sityes = set()
-    temp_list = []
     for i in llist:
         set_of_sityes.add(i[3])
-        temp_list.append(i[4])
-    for j in temp_list:
-        if  temp_list.count(j)==1:
-            set_of_id.add(j)
     for sity in set_of_sityes:
         searches_dict = {}
         searches_dict.clear()
         for item in llist:
             if item[3] == sity:
                 if item[5] not in searches_dict:
-                    if item[4] in set_of_id:
+                    if item[4] not in set_of_id:
+                        set_of_id.add(item[4])
                         searches_dict[item[5]] = 1
+                    else:
+                        continue
                 else:
-                    if item[4] in set_of_id:
+                    if item[4] not in set_of_id:
+                        set_of_id.add(item[4])
                         searches_dict[item[5]] += 1
+                    else:
+                        continue
 
-        if  os.listdir(path='.\ExtractArchive\searches') == []:
+        if os.listdir(path='.\ExtractArchive\searches') == []:
             new_file = open('.\ExtractArchive\searches' + '\\' + sity + '.tsv', 'w', encoding='utf-8')
             for key in searches_dict.keys():
                 new_file.write(key + '\t' + str(searches_dict[key]) + '\n')
@@ -104,16 +107,14 @@ def create_files(llist: list):
             new_file.close()
 
 
-
-
 if __name__ == '__main__':
-    #os.chdir('C:/Users/2K_Mefis_Try/PycharmProjects/home_work')
+    # os.chdir('C:/Users/2K_Mefis_Try/PycharmProjects/home_work')
     dirsPathesList = chech_dirs_tree(MyPath)
     pprint(dirsPathesList)
     print(lines)
     for i in dirsPathesList:
         for j in i[1]:
-            f = read_file(i,j)
+            f = read_file(i, j)
             takes_Words_in_lines2 = add_file_to_list(f)
             f.close()
     printing(takes_Words_in_lines2)
